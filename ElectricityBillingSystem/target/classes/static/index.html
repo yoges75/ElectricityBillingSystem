@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Billing Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+    <a class="brand" href="#dashboard" onclick="showSection('dashboard')">
+        <span class="brand-icon">⚡</span>
+        <span>Volt<span class="brand-light">Bill</span><small>Electricity Management</small></span>
+    </a>
+    <nav>
+        <button class="nav-link active" data-section="dashboard" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-link" data-section="billing" onclick="showSection('billing')">Generate Bill</button>
+        <button class="nav-link" data-section="customers" onclick="showSection('customers')">Customers</button>
+    </nav>
+    <div class="header-status"><span class="status-dot"></span> Billing System</div>
+</header>
+
+<main class="container">
+    <section id="dashboard" class="section active">
+        <div class="page-heading">
+            <div><p class="eyebrow">OVERVIEW</p><h1>Electricity Billing Dashboard</h1>
+                <p class="muted">Manage customers, meter readings and electricity bills in one place.</p></div>
+            <button class="primary-btn" onclick="resetBillForm(); showSection('billing')">＋ Generate New Bill</button>
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span>Total Customers</span><span class="stat-icon blue">♙</span></div><strong id="customerCount">0</strong><small>Registered customers</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Total Units Consumed</span><span class="stat-icon amber">ϟ</span></div><strong id="unitCount">0</strong><small>Across all customers</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Total Bill Amount</span><span class="stat-icon green">₹</span></div><strong id="billTotal">₹0.00</strong><small>Latest bills total</small></article>
+        </div>
+
+        <section class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">CUSTOMER RECORDS</p><h2>Recent Customers</h2></div>
+                <button class="text-btn" onclick="showSection('customers')">View all customers →</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Customer ID</th><th>Name</th><th>Units Used</th><th>Bill Amount</th><th></th></tr></thead>
+                <tbody id="recentCustomers"><tr><td colspan="5" class="empty">Loading customers…</td></tr></tbody></table></div>
+        </section>
+    </section>
+
+    <section id="billing" class="section">
+        <div class="page-heading"><div><p class="eyebrow">BILLING</p><h1 id="billHeading">Generate New Bill</h1><p class="muted">Enter customer details and the latest meter readings.</p></div></div>
+        <div class="content-grid">
+            <section class="panel form-panel">
+                <div class="panel-heading"><div><p class="eyebrow">CUSTOMER INFORMATION</p><h2>Meter Reading Details</h2></div><span class="panel-symbol">⚡</span></div>
+                <form id="billForm">
+                    <div class="form-row"><label for="customerId">Customer ID</label><input type="number" id="customerId" min="1" placeholder="e.g. 1001" required></div>
+                    <div class="form-row"><label for="customerName">Customer Name</label><input type="text" id="customerName" maxlength="100" placeholder="Enter customer name" required></div>
+                    <div class="form-two">
+                        <div class="form-row"><label for="previousReading">Previous Reading</label><input type="number" id="previousReading" min="0" step="0.01" placeholder="0" required></div>
+                        <div class="form-row"><label for="currentReading">Current Reading</label><input type="number" id="currentReading" min="0" step="0.01" placeholder="0" required></div>
+                    </div>
+                    <div class="usage-preview"><span>Units consumed</span><strong id="unitsPreview">0</strong></div>
+                    <div class="form-actions"><button type="submit" class="primary-btn" id="billSubmit">Calculate & Save Bill</button><button type="button" class="secondary-btn" onclick="resetBillForm()">Clear</button></div>
+                    <p id="formMessage" class="message" role="status"></p>
+                </form>
+            </section>
+            <aside class="panel tariff-panel"><p class="eyebrow">BILLING RATES</p><h2>Tariff Structure</h2><p class="muted small">Your bill is calculated progressively using these slabs.</p>
+                <div class="tariff-row"><span>First 100 units</span><strong>₹2 / unit</strong></div>
+                <div class="tariff-row"><span>101–200 units</span><strong>₹3 / unit</strong></div>
+                <div class="tariff-row"><span>201–400 units</span><strong>₹5 / unit</strong></div>
+                <div class="tariff-row"><span>Above 400 units</span><strong>₹7 / unit</strong></div>
+                <div class="tariff-note">The bill amount is calculated automatically when you save the readings.</div>
+            </aside>
+        </div>
+    </section>
+
+    <section id="customers" class="section">
+        <div class="page-heading"><div><p class="eyebrow">DIRECTORY</p><h1>Customer Management</h1><p class="muted">Search customers and view or update their latest bill.</p></div>
+            <button class="primary-btn" onclick="resetBillForm(); showSection('billing')">＋ Add Customer</button></div>
+        <section class="panel">
+            <div class="search-toolbar"><div><h2>All Customers</h2><p class="muted small">Customer details and current billing information</p></div>
+                <div class="search-controls"><input type="number" id="searchId" placeholder="Enter customer ID"><button class="primary-btn" onclick="searchCustomer()">Search</button><button class="secondary-btn" onclick="loadCustomers()">Show All</button></div></div>
+            <div id="searchMessage" class="message"></div>
+            <div class="table-wrap"><table><thead><tr><th>Customer ID</th><th>Name</th><th>Previous</th><th>Current</th><th>Units Used</th><th>Bill Amount</th><th>Action</th></tr></thead>
+                <tbody id="customerTable"><tr><td colspan="7" class="empty">Loading customers…</td></tr></tbody></table></div>
+        </section>
+    </section>
+    <footer>Electricity Billing Management System <span>•</span> Spring Boot &amp; MariaDB</footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
